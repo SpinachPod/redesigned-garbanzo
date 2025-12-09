@@ -126,7 +126,7 @@ fn quicksort_helper(
     step_callback: &mut dyn FnMut(&VisualizerState)
 ) {
     if low < high {
-        if high - low + 1 <= INSERTION_THRESHOLD {
+        if high - low < INSERTION_THRESHOLD {
             insertion_sort_range(state, low, high, step_callback);
             return;
         }
@@ -221,7 +221,7 @@ impl SortingAlgorithm for InsertionSort {
                 step_callback(state);
                 
                 state.array[(j + 1) as usize] = state.array[j as usize];
-                j = j - 1;
+                j -= 1;
             }
             
             state.array[(j + 1) as usize] = key;
@@ -306,7 +306,7 @@ fn counting_sort_by_digit(
 ) {
     let n = state.array.len();
     let mut output = vec![0u32; n];
-    let mut count = vec![0usize; 10];
+    let mut count = [0usize; 10];
     
     for i in 0..n {
         let digit = ((state.array[i] / exp) % 10) as usize;
@@ -414,15 +414,13 @@ impl App {
                 self.is_sorting = false;
                 false
             }
+        } else if self.current_step < self.steps.len() - 1 {
+            self.current_step += 1;
+            self.state = self.steps[self.current_step].clone();
+            true
         } else {
-            if self.current_step < self.steps.len() - 1 {
-                self.current_step += 1;
-                self.state = self.steps[self.current_step].clone();
-                true
-            } else {
-                self.is_sorting = false;
-                false
-            }
+            self.is_sorting = false;
+            false
         }
     }
 
