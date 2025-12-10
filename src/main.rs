@@ -165,6 +165,10 @@ fn insertion_sort_range(
         state.clear_marks();
         step_callback(state);
     }
+    for i in low..high + 1 {
+        state.mark_sorted(&[i]);
+        step_callback(state);
+    }
 }
 
 fn partition(
