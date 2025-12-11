@@ -352,6 +352,7 @@ struct App {
     current_step: usize,
     array_size: usize,
     ludicrous_mode: bool,
+    ocd_mode: bool,
 }
 
 impl App {
@@ -378,6 +379,7 @@ impl App {
             current_step: 0,
             array_size,
             ludicrous_mode: false,
+            ocd_mode: false,
         }
     }
 
@@ -527,7 +529,7 @@ fn draw_ui(f: &mut Frame, app: &App) {
     let total_bars = app.state.array.len();
     
     // Allow bars to be very thin for large arrays
-    let bar_width = if total_bars > available_width as usize {
+    let bar_width = if total_bars > available_width as usize || app.ocd_mode {
         1 // Minimum width
     } else {
         ((available_width as usize / total_bars).max(1).min(5)) as u16
@@ -580,7 +582,7 @@ fn draw_ui(f: &mut Frame, app: &App) {
         Line::from(vec![
             Span::styled("Controls: ", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
         ]),
-        Line::from("[SPACE] Start/Pause  [R] Reset  [←/→] Change Algorithm  [↑/↓] Array Size  [+/-] Speed  [L] Ludicrous  [Q] Quit"),
+        Line::from("[SPACE] Start/Pause  [R] Reset  [←/→] Change Algorithm  [↑/↓] Array Size  [+/-] Speed  [L] Ludicrous  [O] Ocd Mode [Q] Quit"),
     ])
     .block(Block::default().borders(Borders::ALL).title("Info"));
     f.render_widget(info, chunks[2]);
@@ -625,6 +627,9 @@ fn main() -> io::Result<()> {
                     }
                     KeyCode::Char('l') | KeyCode::Char('L') => {
                         app.ludicrous_mode = !app.ludicrous_mode;
+                    }
+                    KeyCode::Char('o') | KeyCode::Char('O') => {
+                        app.ocd_mode = !app.ocd_mode
                     }
                     _ => {}
                 }
