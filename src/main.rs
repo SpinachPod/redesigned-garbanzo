@@ -604,7 +604,7 @@ fn main() -> io::Result<()> {
         if event::poll(Duration::from_millis(app.speed))? {
             if let Event::Key(KeyEvent { code, .. }) = event::read()? {
                 match code {
-                    KeyCode::Char('q') => break,
+                    KeyCode::Char('q') | KeyCode::Char('Q') | KeyCode::Esc => break,
                     KeyCode::Char(' ') => {
                         if !app.is_sorting {
                             app.start_sorting();
@@ -638,11 +638,6 @@ fn main() -> io::Result<()> {
             app.step_forward();
         }
     }
-
-    // Restore terminal
-    disable_raw_mode()?;
-    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
-    terminal.show_cursor()?;
-
+    
     Ok(())
 }
