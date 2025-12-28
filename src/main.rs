@@ -521,7 +521,7 @@ fn draw_ui(f: &mut Frame, app: &App) {
             Color::Blue
         };
         
-        bar_data.push(Bar::default().value(val as u64).style(Style::default().fg(color)));
+        bar_data.push(Bar::default().style(Style::default().fg(color)).value(val as u64).text_value(if app.ocd_mode { "".to_string() } else { val.to_string() }));
     }
 
     // Calculate bar width based on available space
@@ -529,7 +529,7 @@ fn draw_ui(f: &mut Frame, app: &App) {
     let total_bars = app.state.array.len();
     
     // Allow bars to be very thin for large arrays
-    let bar_width = if total_bars > available_width as usize || app.ocd_mode {
+    let bar_width = if total_bars > available_width as usize {
         1 // Minimum width
     } else {
         ((available_width as usize / total_bars).max(1).min(5)) as u16
