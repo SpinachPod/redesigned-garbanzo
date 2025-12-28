@@ -5,7 +5,7 @@ use rand::thread_rng;
 use crossterm::{
     event::{self, Event, KeyCode, KeyEvent},
     execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    terminal::{enable_raw_mode, EnterAlternateScreen},
 };
 use ratatui::{
     backend::CrosstermBackend,
@@ -638,6 +638,6 @@ fn main() -> io::Result<()> {
             app.step_forward();
         }
     }
-    
+
     Ok(())
 }
